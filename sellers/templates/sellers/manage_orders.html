@@ -1,0 +1,28 @@
+{%extends "Ecomm/base.html" %}
+
+{%block content%}
+  <p>Welcome to Ecom Sellers family!</p>
+  <p>Hello dear vendor! {{seller.username}}</p>
+
+{% for order in orders %}
+    <tr>
+      <td>{{ order.product.product_name }}</td>
+      <td>{{ order.quantity }}</td>
+      <td>{{ order.order_date|date:"M d, Y" }}</td>
+      <td>{{ order.status }}</td>
+      <td>
+        <!-- Form for updating status -->
+        <form method="post" action="{% url 'sellers:manage_orders' %}">
+          {% csrf_token %}
+          <select name="status">
+            <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+          </select>
+          <button type="submit">Update</button>
+        </form>
+      </td>
+    </tr>
+{%endfor%}
+
+{%endblock content%}

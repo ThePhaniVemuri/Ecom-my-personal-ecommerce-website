@@ -1,0 +1,63 @@
+{% extends 'Ecomm/base.html' %}
+
+<!-- Filter Form -->
+<form method="get">
+  <!-- Create a container for the layout -->
+  <div class="container" >
+    <div class="row">
+      <!-- Filter column (taking up 3/12 or 4/12 of the screen width) -->
+      <div class="col-md-3">
+        <div class="mb-3">
+          <h2>{{sub_category_name}}</h2> <!-- Subcategory name -->
+          {% for field in form %}
+            <div class="mb-3">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              <div class="input-group">
+                {{ field }}
+              </div>
+              {% if field.help_text %}
+                <small id="{{ field.id_for_label }}_help" class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% if field.errors %}
+                <div class="text-danger">
+                  {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <!-- Submit button with Bootstrap styling -->
+        <button type="submit" class="btn btn-warning w-100">Apply Filters</button>
+      </div>
+
+      {% block content %}
+
+      <!-- Products Column (taking up 9/12 of the screen width) -->
+      <div class="col-md-9">
+        <div class="row">
+          {% for product in products_in_sub_category %}
+            <div class="col-md-4 mb-4"> <!-- 3 products per row (col-md-4 is 1/3 of the row) -->
+              <div class="card" style="width: 18rem;">
+                <img src="{{ product.image_url }}" class="card-img-top" alt="..."> <!-- Change src to the product image URL -->
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.product_name }}</h5>
+                  <h6>${{ product.price }}</h6>
+                  <p>Added on {{ product.date_added|date:"M d, Y" }}</p>
+                  <form class="btn btn-primary" method="post" action="{% url 'users:add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning w-100">Add to Cart</button>   
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+

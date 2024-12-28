@@ -1,0 +1,81 @@
+{% extends 'products/products_in_sub_category.html' %}
+
+{% block content %}
+  <h2>Search Results for "{{ searched_input }}"</h2>
+
+  {% if message %}
+    <p>{{ message }}</p>
+  {% else %}
+    <!-- Exact Matches Section -->
+    {% if result_product1 %}
+      <h3>Exact Matches:</h3>
+      <div class="row">
+        {% for product in result_product1 %}
+          <div class="col-md-4 mb-4"> <!-- 3 products per row -->
+            <div class="card" style="width: 18rem;">
+              <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <h6>${{ product.price }}</h6>
+                <form method="post" action="{% url 'users:add_to_cart' product.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No exact matches found.</p>
+    {% endif %}
+
+    <!-- Products in the Same Category -->
+    {% if product_same_category %}
+      <h3>Products in the Same Category:</h3>
+      <div class="row">
+        {% for product in product_same_category %}
+          <div class="col-md-4 mb-4"> <!-- 3 products per row -->
+            <div class="card" style="width: 18rem;">
+              <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <h6>${{ product.price }}</h6>
+                <form method="post" action="{% url 'users:add_to_cart' product.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No products found in the same category.</p>
+    {% endif %}
+
+    <!-- Other Products (Name Matches) -->
+    {% if other_textmatch_products %}
+      <h3>Other Products (Name Matches):</h3>
+      <div class="row">
+        {% for product in other_textmatch_products %}
+          <div class="col-md-4 mb-4"> <!-- 3 products per row -->
+            <div class="card" style="width: 18rem;">
+              <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.product_name }}</h5>
+                <h6>${{ product.price }}</h6>
+                <form method="post" action="{% url 'users:add_to_cart' product.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No similar products found.</p>
+    {% endif %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "Ecomm/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card" style="width: 100%; max-width: 400px;">
+      <div class="card-body">
+        <p>Add a new product</p>
+
+  <form action="{% url 'sellers:add_product' %}" method="post" class="form-group">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Product</button>
+  </form>
+  </div>
+    </div>
+  </div>
+{% endblock content %}

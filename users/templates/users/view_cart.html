@@ -1,0 +1,37 @@
+{% extends 'Ecomm/base.html' %}
+
+{% block content %}
+<h1>Your Cart</h1>
+
+<ul>
+  {% for item in cart_items %}
+    <div class="card" style="width: 75rem;">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+      <h5 class="card-title">{{ item.product.product_name }}</h5>
+      <p>Price: ${{ item.product.price }}</p>
+      <p>Quantity: {{ item.quantity }}</p>
+      <p>Total: ${{ item.get_total_price }}</p>
+      <form method="post" action="{% url 'users:update_cart' item.id %}">
+        {% csrf_token %}
+        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+        <button type="submit" class="btn btn-warning w-100">Update Quantity</button>
+      </form>
+      <form method="post" action="{% url 'users:remove_from_cart' item.id %}">
+        <button type="submit" class="btn btn-warning w-100">Remove</button>
+      </form>
+    </div>
+  {% endfor %}
+</ul>
+
+<h2>Total Price: ${{ total_price }}</h2>
+
+<div class="sticky-bottom">
+<form method="post" action="{%url 'users:checkout'%}">
+{% csrf_token %}
+<div class="d-grid gap-2 col-6 mx-auto">
+  <button class="btn btn-warning" type="submit">Proceed to CheckOut</button>
+</div>
+</form>
+</div>
+{% endblock %}

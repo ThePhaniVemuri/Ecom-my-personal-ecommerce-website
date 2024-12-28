@@ -1,0 +1,12 @@
+{%extends "Ecomm/base.html"%}
+
+{%block content%}
+   <p>Add Subcategory of the Category</p>
+
+   <form action="{%url 'Ecomm:add_sub_category'%}" method='post'>
+   {%csrf_token%}
+   {{form.as_p}}
+    <button type="submit">Add Subcategory</button>
+
+
+{%endblock content%}

@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'ecomm/css/ecomlogo.css' %}">  <!-- Correct static path -->
+    <title>{% block title %}Ecom from Phani{% endblock %}</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+
+  <body>
+
+<nav class="navbar navbar-expand-lg " style="background-color:rgba(243, 165, 30, 0.69);">
+  <div class="container-fluid">
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+      <!--a class="navbar-brand" href="#"-->
+              <!-- Ecom Logo in navbar-->
+          <div>
+          <a href="{% url 'Ecomm:Home_page' %}">
+          <img src="http://localhost:8000/static/images/ecom.jpg" alt="Logo" width="40" height="24" class="d-inline-block align-text-top">
+          </a>
+          </div>
+        </a>
+      </div>
+    </nav>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">   <!-- User Authentication Check -->
+          <a class="nav-link active" aria-current="page">
+              {% if user.is_authenticated %}
+                  <p>Hello, {{ user.username }}</p>
+          </a>
+        </li>  <!--order history-->
+        <li class="nav-item"> <a class="nav-link" href="{% url 'orders:order_history' %}">Orders & Returns</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Accounts & LogOut
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'users:logoutt' %}">LogOut</a></li>
+            {% else %}
+            <li><a class="dropdown-item" href="{% url 'users:login' %}">LogIn</a></li>
+            <li><a class="dropdown-item" href="{% url 'users:register' %}">SignUp</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="#">Your Orders</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Memberships</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true"></a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" method="get" action="{% url 'products:search_bar' %}">
+        <input class="form-control me-2" type="search" name="q" placeholder="Search for products..." aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+          
+          <div class="nav-item">  <!--MyCart viewing-->
+            <a href="{%url 'users:view_cart'%}">
+            <img src="data:image/png;base64,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" width="45" height="45"  alt="carticon">
+            </a>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">All</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <img src="data:image/jpeg;base64,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" width="30" height="40"  alt="Menuicon">
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Shop by Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'Ecomm:Home_page' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" ></a>
+          </li>
+          
+          <ul class="navbar-nav">
+            {% for category in Categories %}
+              <li class="nav-item dropdown">
+                <!-- Dropdown toggle -->
+                <a 
+                  class="nav-link dropdown-toggle" 
+                  href="#" 
+                  id="dropdown{{ category.id }}" 
+                  role="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false">
+                  {{ category.category_name }}
+                </a>
+
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu" aria-labelledby="dropdown{{ category.id }}">
+                  {% for sub in Sub_categories %}
+                    {% if sub.category_of_subcategory.id == category.id %}
+                      <li>
+                        <a class="dropdown-item" href="{% url 'products:Products_in_sub_category' sub.sub_category_name %}">
+                          {{ sub.sub_category_name }}
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}
+          </ul>
+
+          </li>
+
+        <!--form class="d-flex mt-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form-->
+      </div>
+    </div>
+  </div>
+  </li>
+
+
+  <li class="nav-item">
+    <!-- Sell option -->
+          <a class="nav-link" href="{%url 'sellers:seller_login' %}">Sell</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{%url 'sellers:dashboard' %}">Seller Dashboard</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+  </li>
+</ul>
+
+
+{% block content %}
+
+
+<div class="container" style="max-width: 600px; max-height: 400px;">
+  <div id="carouselExampleIndicators" class="carousel slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item">
+        <img src="https://media.istockphoto.com/id/1278547508/photo/household-appliances-and-kitchen-electronics-in-cardboard-boxes-in-warehouse-online-purchase.jpg?s=612x612&w=0&k=20&c=TPgt8MNMmhseiDBO_2qLPiclopqFyRrz8uR6zvlDg5A=" class="d-block w-100" alt="electronics">
+      </div>
+      <div class="carousel-item active">
+        <img src="https://i.ytimg.com/vi/26icfjpAzbM/maxresdefault.jpg" class="d-block w-100" alt="mensfashion">
+      </div>
+      <div class="carousel-item">
+        <img src="https://thrivethinking.com/wp-content/uploads/2019/12/10BooksServiecDesign_12.jpg" class="d-block w-100" alt="books">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    <div class="card" style="width: 18rem;">
+      <img src="https://i0.wp.com/thescove.com/wp-content/uploads/2022/08/kitchen-cooking.jpg?fit=1500%2C1500&ssl=1" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Customers' Most-Loved Kitchen Products for you</h5>
+        <p class="card-text">Shop for Kitchen Appliances from Top Brands at Ecom.Large Collection of essentials for your kitchen</p>
+        <a href="#" class="btn btn-primary">Explore</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card" style="width: 18rem;">
+      <img src="https://static.fibre2fashion.com//articleresources/images/71/7074/SAdobeStock_247321133_Small.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Women's Fashion at Ecom</h5>
+        <p class="card-text">Women's Clothing,Western Wear,Ethnic Wear,Lingerie & Nightwear Top Brands of Accessories are available at Ecom</p>
+        <a href="#" class="btn btn-primary">Explore</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card" style="width: 18rem;">
+      <img src="https://media.istockphoto.com/id/1072351298/photo/young-girl-playing-with-educational-toys.jpg?s=612x612&w=0&k=20&c=FetuwtUPQoy7GfAZCNRbmVZ7JXggsJOXkS3b1gSbTYw=" class="card-img-top" alt="..."> 
+      <div class="card-body">
+        <h5 class="card-title">Toys & Games</h5>
+        <p class="card-text">Toy Figures & Playsets
+Arts & Crafts
+Baby & Toddler Toys are available at Ecom</p>
+        <a href="#" class="btn btn-primary">Explore</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Discounted prodcuts list-->
+
+<div class="container">
+    <div class="row">
+        {% if request.discounted_products %}
+            <div class="col-12">
+                <h2>@ 20% Off on Electronics</h2>
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% for product in request.discounted_products %}
+            <div class="col-md-4">
+                <div class="card mb-4" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.product_name }}</h5>
+                        {% if product.discounted_price %}
+                            <p>Discounted Price: ${{ product.discounted_price }}</p>
+                            <p>Original Price: <s>${{ product.price }}</s></p>
+                        {% else %}
+                            <p>Price: ${{ product.price }}</p>
+                        {% endif %}
+                        <form class="btn btn-primary" method="post" action="{% url 'users:add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning w-100">Add to Cart</button>   
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>

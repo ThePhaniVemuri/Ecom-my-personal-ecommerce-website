@@ -1,0 +1,72 @@
+{% extends "Ecomm/base.html" %}
+
+{% block content %}
+  <h2><div class="text-center" class="sticky-lg-top">Welcome Ecom Sellers family!</div><h2>
+  <h4>Hello dear vendor! {{ seller.username }}</h4>
+
+  <h3>My Orders</h3>
+  {% for order in orders %}
+    <div class="card mb-3" style="width: 75rem;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{ order.product.image_url }}" class="card-img" alt="{{ order.product.product_name }}">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ order.product.product_name }}</h5>
+            <p class="card-text">Quantity: {{ order.quantity }}</p>
+            <p class="card-text">Order Date: {{ order.order_date|date:"M d, Y" }}</p>
+            <p class="card-text">Status: {{ order.status }}</p>
+
+            <!-- Form for updating status -->
+            <form method="post" action="{% url 'sellers:manage_orders' %}">
+              {% csrf_token %}
+              <select name="status" class="form-control">
+                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+              </select>
+              <button type="submit" class="btn btn-success mt-2">Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No orders to manage at this time.</p>
+  {% endfor %}
+
+  <h3>My Products</h3>
+  {% for product in products %}
+    <div class="card mb-3" style="width: 75rem;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{ product.image_url }}" class="card-img" alt="{{ product.product_name }}">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product_name }}</h5>
+            <p class="card-text">{{ product.about_product }}</p>
+            <p class="card-text">${{ product.price }}</p>
+            <p class="card-text">Added on: {{ product.date_added|date:"M d, Y" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No products added by you.</p>
+  {% endfor %}
+    <div class="container text-center">
+      <div class="row align-items-center">
+      <div class="col">
+        <a href="{% url 'Ecomm:add_category' %}" class="btn btn-warning">Add a new category</a>
+      </div>
+      <div class="col">
+        <a href="{% url 'Ecomm:add_sub_category' %}" class="btn btn-warning">Add a new Sub-Category</a>
+      </div>
+      <div class="col">
+        <a href="{% url 'sellers:add_product' %}" class="btn btn-warning">Add a Product</a>
+      </div>
+      </div>
+    </div>
+{% endblock content %}

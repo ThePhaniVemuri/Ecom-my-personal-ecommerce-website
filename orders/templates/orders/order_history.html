@@ -1,0 +1,30 @@
+{% extends 'Ecomm/base.html' %}
+
+{% block content %}
+<h1>My Orders</h1>
+
+<ul>
+    {% for order in orders %}
+        {% if order.status != 'Cancelled' %}
+        <h3>Order {{ order.id }} - Status: {{ order.status }}</h3>
+        <p>Ordered on: {{ order.order_date|date:"M d, Y H:i" }}</p>
+        {% for order_product in order.orderproduct_set.all %}
+            <div class="card" style="width: 75rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h4  class="card-title">{{ order_product.product.product_name }}</h4>
+            <p>Quantity: {{ order_product.quantity }}</p>
+            <p>Total Price: ${{ total_price }}</p>
+        {% endfor %}
+        {% if order.status == 'Pending' %}
+        <form method="post" action="{% url 'orders:cancel_order' order.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-warning w-100">Cancel Order</button>
+        </form>
+        {% endif %}
+            </div>
+            </div>
+            {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'Ecomm/base.html' %}
+
+{% block content %}
+<h1>Your Order Summary</h1>
+
+<ul>
+  {% for order in orders %}
+        {% for order_product in order.orderproduct_set.all %}
+            <div class="card" style="width: 75rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h4>{{ order_product.product.product_name }}</h4>
+            <p>Price: ${{ order_product.product.price }}</p>
+            <p>Quantity: {{ order_product.quantity }}</p>
+            <p>Total: ${{ order_product.get_total_price }}</p>
+            </div>
+          </div>
+  {% endfor %}
+  {% endfor %}
+</ul>
+
+<h2>Total Price: ${{ total_price }}</h2>
+
+<div class="sticky-bottom">
+<form method="POST" action="{% url 'payments:initiate_payment' order_ids %}">
+    {% csrf_token %}
+    <div class="d-grid gap-2 col-6 mx-auto">
+    <button class="btn btn-warning" type="submit">Proceed to Payment</button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

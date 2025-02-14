@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import requests
 import hashlib
@@ -11,6 +11,9 @@ from orders.models import Order,OrderProduct
 from .models import Payment
 
 from django.views.decorators.csrf import csrf_exempt
+
+def viewPage(request):
+    return HttpResponse('<h1>Your payment is being processed....Explore our site more<h1> <h2>Press back and return to home page</h2>')
 
 def initiate_payment(request, order_ids):
     categories = Category.objects.all()  # Fetch all categories

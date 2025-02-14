@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0$6plmu!$*iwl^y%wxvs8ni_imwc4u@pq6crr@+*tbygh5lc6l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -140,6 +140,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/users/login/'  # Replace this with the URL of your custom login page
+LOGOUT_REDIRECT_URL='Ecomm/Home_page/'
 
 PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86"
 PHONEPE_API_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"

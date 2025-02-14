@@ -22,7 +22,7 @@
 <h2>Total Price: ${{ total_price }}</h2>
 
 <div class="sticky-bottom">
-<form method="POST" action="{% url 'payments:initiate_payment' order_ids %}">
+<form method="POST" action="{% url 'payments:viewPage'%}">
     {% csrf_token %}
     <div class="d-grid gap-2 col-6 mx-auto">
     <button class="btn btn-warning" type="submit">Proceed to Payment</button>

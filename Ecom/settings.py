@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url  # type: ignore
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +31,7 @@ SECRET_KEY = 'django-insecure-0$6plmu!$*iwl^y%wxvs8ni_imwc4u@pq6crr@+*tbygh5lc6l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app', 'https://ecom-my-personal-ecommerce-website.vercel.app/']
 
 
 # Application definition
@@ -79,15 +85,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ecom.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -147,5 +149,5 @@ PHONEPE_API_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
 PHONEPE_BASE_URL = "https://api.phonepe.com/v3"  # Sandbox URL for testing
 PHONEPE_CALLBACK_URL = "http://localhost:8000/payments/callback/"  # Replace with actual callback URL
 
-
-
+print("📦 DATABASE_URL from env:", os.environ.get('DATABASE_URL'))
+print("🔗 Parsed DB:", DATABASES['default'])
